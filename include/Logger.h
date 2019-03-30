@@ -1,12 +1,12 @@
 #pragma once
-#include <string_view>
+#include <string>
 #include <mutex>
 #include <boost/log/trivial.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 
 using namespace std;
 
-namespace CommonUtilities {
+namespace ServiceLayer {
 
     class Logger
     {
@@ -17,11 +17,11 @@ namespace CommonUtilities {
         Logger(const Logger&) = delete;
         Logger& operator=(Logger&) = delete;
 
-        void LogTrace(string_view message);
-        void LogDebug(string_view message);
-        void LogInfo(string_view message);
-        void LogWarning(string_view message);
-        void LogError(string_view message);
+        void LogTrace(const string& message);
+        void LogDebug(const string& message);
+        void LogInfo(const string& message);
+        void LogWarning(const string& message);
+        void LogError(const string& message);
 
     private:
         Logger();

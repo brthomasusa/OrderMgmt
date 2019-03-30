@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include <memory>
-#include <utility>
 #include <vector>
 #include "ocilib.hpp"
-
+#include "AddressMapper.h"
 
 using namespace std;
 using namespace testing;
-
+using namespace ocilib;
+using namespace DataAccess;
 
 void prepareDbForTesting()
 {
@@ -39,5 +39,12 @@ int main(int argc, char** argv)
 TEST(AddressMapperIntegration_Test, AddressMapper_findById)
 {
     prepareDbForTesting();
-    
+
+    int addressID {1};
+
+    AddressMapper addressMapper;
+    shared_ptr<Address> address {addressMapper.findById(addressID)};
+
+    EXPECT_NE(address, nullptr);
+    ASSERT_EQ(address->getAddressId(), 1);
 }

@@ -13,7 +13,7 @@
 namespace logging = boost::log;
 using namespace logging::trivial;
 
-namespace CommonUtilities {
+namespace ServiceLayer {
 
     Logger Logger::_instance;
 
@@ -28,31 +28,31 @@ namespace CommonUtilities {
         logging::add_common_attributes();
     }
 
-    void Logger::LogTrace(string_view message)
+    void Logger::LogTrace(const string& message)
     {
         lock_guard<mutex> guard(_lock);
         BOOST_LOG_SEV(_logger, trace) << message;
     }
 
-    void Logger::LogDebug(string_view message)
+    void Logger::LogDebug(const string& message)
     {
         lock_guard<mutex> guard(_lock);
         BOOST_LOG_SEV(_logger, debug) << message;
     }
 
-    void Logger::LogInfo(string_view message)
+    void Logger::LogInfo(const string& message)
     {
         lock_guard<mutex> guard(_lock);
         BOOST_LOG_SEV(_logger, info) << message;
     }
 
-    void Logger::LogWarning(string_view message)
+    void Logger::LogWarning(const string& message)
     {
         lock_guard<mutex> guard(_lock);
         BOOST_LOG_SEV(_logger, warning) << message;
     }
 
-    void Logger::LogError(string_view message)
+    void Logger::LogError(const string& message)
     {
         lock_guard<mutex> guard(_lock);
         BOOST_LOG_SEV(_logger, error) << message;
@@ -62,7 +62,7 @@ namespace CommonUtilities {
     {
         logging::add_file_log
                 (
-                        boost::log::keywords::file_name = "/home/bthomas/Projects/cplus/OciLibTest/logs/OciLibTest-%N.log",
+                        boost::log::keywords::file_name = "/home/bthomas/Projects/cplus/OrderManager-v1/logs/OrderMgr-%N.log",
                         boost::log::keywords::open_mode = std::ios_base::app,
                         boost::log::keywords::rotation_size = 10 * 1024 * 1024,
                         boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),

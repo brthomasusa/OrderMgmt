@@ -17,7 +17,7 @@ namespace DataAccess
         void updateEntity(const Address& entity) override;
 
     protected:
-        shared_ptr<Address> load(int id, Resultset& rs) override ;
+        shared_ptr<Address> load(Resultset& rs) override ;
         vector<shared_ptr<Address>> loadAll(Resultset& rs) override ;
 
         const string& getFindStatement() override;
@@ -27,7 +27,7 @@ namespace DataAccess
 
     private:
         const string _findStatement {"SELECT * FROM addresses WHERE address_id = :1"};
-        const string _findAllStatement {"SELECT * FROM addresses WHERE entity_id = :1"};
+        const string _findAllStatement {"SELECT * FROM addresses"};
         const string _findChildrenStatement {"SELECT * FROM addresses WHERE entity_id = :1"};
         const string _deleteStatement {"DELETE FROM addresses WHERE address_id = :1"};
 

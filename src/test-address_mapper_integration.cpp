@@ -45,6 +45,87 @@ TEST(AddressMapperIntegration_Test, AddressMapper_findById)
     AddressMapper addressMapper;
     shared_ptr<Address> address {addressMapper.findById(addressID)};
 
-    EXPECT_NE(address, nullptr);
     ASSERT_EQ(address->getAddressId(), 1);
+}
+
+TEST(AddressMapperIntegration_Test, AddressMapper_findChildren)
+{
+    prepareDbForTesting();
+
+    int entityID {3};
+
+    AddressMapper addressMapper;
+    vector<shared_ptr<Address>> addresses {addressMapper.findChildren(entityID)};
+
+    uint records {1};
+    ASSERT_EQ(records, addresses.size());
+}
+
+TEST(AddressMapperIntegration_Test, AddressMapper_findAll)
+{
+    prepareDbForTesting();
+
+    AddressMapper addressMapper;
+    vector<shared_ptr<Address>> addresses {addressMapper.findAll()};
+
+    uint records {3};
+    ASSERT_EQ(records, addresses.size());
+}
+
+TEST(AddressMapperIntegration_Test, AddressMapper_insertEntity)
+{
+    prepareDbForTesting();
+
+    AddressMapper addressMapper;
+
+    Address newAddress{
+        -1,
+        1,
+        "XXX",
+        "Ste X",
+        "Arlington",
+        "TX",
+        "76222",
+        "30-03-2019"
+    };
+
+    addressMapper.insertEntity(newAddress);
+    int expectedResult {4};
+    ASSERT_EQ(expectedResult, newAddress.getAddressId());
+}
+
+TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
+{
+    prepareDbForTesting();
+
+    AddressMapper addressMapper;
+
+    Address edited{
+            3,
+            1,
+            "XXX",
+            "Ste X",
+            "Arlington",
+            "TX",
+            "76222",
+            "30-03-2019"
+    };
+
+    addressMapper.updateEntity(edited);
+    shared_ptr<Address> address {addressMapper.findById(edited.getAddressId())};
+
+    EXPECT_EQ(address->getAddressId(), edited.getAddressId());
+    ASSERT_EQ(address->getAddressLine1(), edited.getAddressLine1());
+}
+
+TEST(AddressMapperIntegration_Test, AddressMapper_deleteEntity)
+{
+    prepareDbForTesting();
+
+    int deletedAddressID{3};
+    AddressMapper addressMapper;
+    addressMapper.deleteEntity(deletedAddressID);
+    shared_ptr<Address> address {addressMapper.findById(deletedAddressID)};
+
+    ASSERT_EQ(address, nullptr);
 }

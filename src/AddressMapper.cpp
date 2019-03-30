@@ -1,6 +1,8 @@
 #include "AddressMapper.h"
 #include "ocilib.hpp"
+#include <iostream>
 
+using namespace std;
 using namespace ocilib;
 
 namespace DataAccess
@@ -124,32 +126,34 @@ namespace DataAccess
         Logger::instance().LogInfo("Leaving AddressMapper::updateEntity");
     }
 
-    shared_ptr<Address> AddressMapper::load(int id, Resultset& rs)
+    shared_ptr<Address> AddressMapper::load(Resultset& rs)
     {
         Logger::instance().LogInfo("Entering AddressMapper::load");
 
-        shared_ptr<Address> address {make_shared<Address>()};
+        shared_ptr<Address> address;
 
         try
         {
 
-            while (rs++)
+            while (rs.Next())
             {
-                shared_ptr<Address> address = make_shared<Address>(
-                rs.Get<int>(kAddressID),
-                rs.Get<int>(kEntityID),
-                rs.Get<string>(kLine1),
-                rs.Get<string>(kLine2),
-                rs.Get<string>(kCity),
-                rs.Get<string>(kState),
-                rs.Get<string>(kZipcode),
-                rs.Get<string>(kTimestamp)
+
+                Timestamp tm = rs.Get<Timestamp>(kTimestamp);
+                // string timeStamp = tm.ToString("DD/MM/YYYY HH24:MI:SS:FF6");
+                string timeStamp = tm.ToString("DD/MM/YYYY HH:MI:SS:FF6 AM");
+
+                address = make_shared<Address>(
+                    rs.Get<int>(kAddressID),
+                    rs.Get<int>(kEntityID),
+                    rs.Get<string>(kLine1),
+                    rs.Get<string>(kLine2),
+                    rs.Get<string>(kCity),
+                    rs.Get<string>(kState),
+                    rs.Get<string>(kZipcode),
+                    timeStamp
                 );
             }
 
-            string line1 {address->getAddressLine1()};
-            string line2 {address->getAddressLine2()};
-            string city {address->getCity()};
         }
         catch (exception &ex)
         {
@@ -171,6 +175,9 @@ namespace DataAccess
 
             while (rs++)
             {
+                Timestamp tm = rs.Get<Timestamp>(kTimestamp);
+                string timeStamp = tm.ToString("DD/MM/YYYY HH24:MI:SS:FF6");
+
                 shared_ptr<Address> address = make_shared<Address>(
                     rs.Get<int>(kAddressID),
                     rs.Get<int>(kEntityID),
@@ -179,7 +186,7 @@ namespace DataAccess
                     rs.Get<string>(kCity),
                     rs.Get<string>(kState),
                     rs.Get<string>(kZipcode),
-                    rs.Get<string>(kTimestamp)
+                    timeStamp
                 );
 
                 addresses.push_back(address);

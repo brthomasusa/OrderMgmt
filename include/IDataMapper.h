@@ -30,14 +30,13 @@ namespace DataAccess
                 Environment::Initialize();
                 Connection connection("oracle18db/xepdb1", "cust_orders", "Info77Gum");
                 Statement stmt(connection);
-
                 stmt.Prepare(getFindStatement());
                 stmt.Bind(":1", entityId, BindInfo::In);
                 stmt.ExecutePrepared();
 
                 Resultset rs = stmt.GetResultset();
 
-                entity = load(entityId, rs);
+                entity = load(rs);
 
             }
             catch (exception &ex)
@@ -138,7 +137,7 @@ namespace DataAccess
         }
 
     protected:
-        virtual shared_ptr<T> load(int id, Resultset& rs) = 0;
+        virtual shared_ptr<T> load(Resultset& rs) = 0;
         virtual vector<shared_ptr<T>> loadAll(Resultset& rs) = 0;
 
         virtual const string& getFindStatement() = 0;

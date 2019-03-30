@@ -86,7 +86,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_insertEntity)
         "Arlington",
         "TX",
         "76222",
-        "30-03-2019"
+        "27-MAR-19 05.00.36.728497000 AM"
     };
 
     addressMapper.insertEntity(newAddress);
@@ -99,23 +99,20 @@ TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
     prepareDbForTesting();
 
     AddressMapper addressMapper;
+    Address editAddres;
+    editAddres.setAddressId(3);
+    editAddres.setEntityId(1);
+    editAddres.setAddressLine1("AAA");
+    editAddres.setAddressLine2("null");
+    editAddres.setCity("Dallas");
+    editAddres.setStateCode("TX");
+    editAddres.setZipcode("56789");
 
-    Address edited{
-            3,
-            1,
-            "XXX",
-            "Ste X",
-            "Arlington",
-            "TX",
-            "76222",
-            "30-03-2019"
-    };
+    addressMapper.updateEntity(editAddres);
+    shared_ptr<Address> address {addressMapper.findById(editAddres.getAddressId())};
 
-    addressMapper.updateEntity(edited);
-    shared_ptr<Address> address {addressMapper.findById(edited.getAddressId())};
-
-    EXPECT_EQ(address->getAddressId(), edited.getAddressId());
-    ASSERT_EQ(address->getAddressLine1(), edited.getAddressLine1());
+    EXPECT_EQ(address->getAddressId(), editAddres.getAddressId());
+    ASSERT_EQ(address->getAddressLine1(), editAddres.getAddressLine1());
 }
 
 TEST(AddressMapperIntegration_Test, AddressMapper_deleteEntity)

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include "DomainObject.h"
 
 using namespace std;
 
@@ -14,14 +15,13 @@ namespace CommonLayer
         OFFICE =3
     };
 
-    class Telephone
+    class Telephone : public DomainObject
     {
     public:
         Telephone();
+        Telephone(int id, int entityId, const string& telNum, const string& extension, const TelephoneType& telType, const string& modified);
         ~Telephone() = default;
 
-        void setTelephoneId(int val);
-        int getTelephoneId() const;
         void setEntityId(int val);
         int getEntityId() const;
         void setTelephoneNumber(const string& val);

@@ -2,16 +2,18 @@
 
 #include <string>
 #include <memory>
+#include "DomainObject.h"
 
 using namespace std;
 
 namespace CommonLayer
 {
-    class Customer
+    class Customer : public DomainObject
     {
 
     public:
         Customer();
+        Customer(int id, const string& name, const string& website, const string& timeStamp);
         ~Customer() = default;
 
         void setCustomerId(int val);
@@ -20,6 +22,7 @@ namespace CommonLayer
         const string& getCustomerName() const;
         void setWebsite(const string& val);
         const string& getWebsite() const;
+        void setLastModified(const string& val);
         const string& getLastModified() const;
 
     private:

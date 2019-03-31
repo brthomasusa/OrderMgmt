@@ -9,7 +9,6 @@ namespace CommonLayer
         Implementation() = default;
         ~Implementation() = default;
 
-        int _addressID;
         int _entityID;
         string _addressLine1;
         string _addressLine2;
@@ -39,7 +38,7 @@ namespace CommonLayer
         impl->_zipcode = zipcode;
         impl->_timestamp = timestamp;
     }
-    
+
     void Address::setEntityId(int val) { impl->_entityID = val; }
     int Address::getEntityId() const { return impl->_entityID; }
 

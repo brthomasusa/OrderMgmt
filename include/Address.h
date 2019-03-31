@@ -3,12 +3,13 @@
 
 #include <string>
 #include <memory>
+#include "DomainObject.h"
 
 using namespace std;
 
 namespace CommonLayer
 {
-    class Address
+    class Address : public DomainObject
     {
 
     public:
@@ -17,8 +18,6 @@ namespace CommonLayer
                 const string& state, const string& zipcode, const string& timestamp);
         ~Address() = default;
 
-        void setAddressId(int val);
-        int getAddressId() const;
         void setEntityId(int val);
         int getEntityId() const;
         void setAddressLine1(const string& val);

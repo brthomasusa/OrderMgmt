@@ -45,7 +45,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_findById)
     AddressMapper addressMapper;
     shared_ptr<Address> address {addressMapper.findById(addressID)};
 
-    ASSERT_EQ(address->getAddressId(), 1);
+    ASSERT_EQ(address->getID(), 1);
 }
 
 TEST(AddressMapperIntegration_Test, AddressMapper_findChildren)
@@ -91,7 +91,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_insertEntity)
 
     addressMapper.insertEntity(newAddress);
     int expectedResult {4};
-    ASSERT_EQ(expectedResult, newAddress.getAddressId());
+    ASSERT_EQ(expectedResult, newAddress.getID());
 }
 
 TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
@@ -100,7 +100,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
 
     AddressMapper addressMapper;
     Address editAddres;
-    editAddres.setAddressId(3);
+    editAddres.setID(3);
     editAddres.setEntityId(1);
     editAddres.setAddressLine1("AAA");
     editAddres.setAddressLine2("null");
@@ -109,9 +109,9 @@ TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
     editAddres.setZipcode("56789");
 
     addressMapper.updateEntity(editAddres);
-    shared_ptr<Address> address {addressMapper.findById(editAddres.getAddressId())};
+    shared_ptr<Address> address {addressMapper.findById(editAddres.getID())};
 
-    EXPECT_EQ(address->getAddressId(), editAddres.getAddressId());
+    EXPECT_EQ(address->getID(), editAddres.getID());
     ASSERT_EQ(address->getAddressLine1(), editAddres.getAddressLine1());
 }
 

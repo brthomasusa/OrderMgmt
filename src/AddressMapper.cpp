@@ -59,7 +59,7 @@ namespace DataAccess
             }
 
             // Update the AddressId field with the new key
-            entity.setAddressId(insertedKey);
+            entity.setID(insertedKey);
 
         }
         catch (exception &ex)
@@ -74,7 +74,7 @@ namespace DataAccess
     {
         Logger::instance().LogInfo("Entering AddressMapper::updateEntity");
 
-        int addressID {entity.getAddressId()};
+        int addressID {entity.getID()};
         int entityID {entity.getEntityId()};
 
         // OciLib::Statement::Bind to a string requires local variables only!!!

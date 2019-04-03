@@ -14,6 +14,13 @@ namespace CommonLayer
         DomainObject(int id);
         virtual ~DomainObject() = default;
 
+        bool operator==(const DomainObject& domainObject) const;
+        bool operator!=(const DomainObject& domainObject) const;
+        bool operator<(const DomainObject& domainObject) const;
+        bool operator<=(const DomainObject& domainObject) const;
+        bool operator>(const DomainObject& domainObject) const;
+        bool operator>=(const DomainObject& domainObject) const;
+
         void setID(int val);
         int getID() const;
 

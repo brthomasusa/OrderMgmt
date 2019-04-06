@@ -13,7 +13,7 @@ namespace CommonLayer
 
     public:
         Customer();
-        Customer(int id, const string& name, const string& website, const string& timeStamp);
+        Customer(int id, const string& name, const string& website, const ptime& timeStamp);
         ~Customer() = default;
 
         void setCustomerId(int val);
@@ -23,7 +23,6 @@ namespace CommonLayer
         void setWebsite(const string& val);
         const string& getWebsite() const;
         void setLastModified(const string& val);
-        const string& getLastModified() const;
 
     private:
         class Implementation;

@@ -19,7 +19,7 @@ namespace CommonLayer
     {
     public:
         Telephone();
-        Telephone(int id, int entityId, const string& telNum, const string& extension, const TelephoneType& telType, const string& modified);
+        Telephone(int id, int entityId, const string& telNum, const string& extension, const TelephoneType& telType, const ptime& modified);
         ~Telephone() = default;
 
         void setEntityId(int val);
@@ -30,7 +30,6 @@ namespace CommonLayer
         const string& getExtension() const;
         void setTelephoneType(const TelephoneType& val);
         const TelephoneType& getTelephoneType() const;
-        const string& getLastModified() const;
 
     private:
         class Implementation;

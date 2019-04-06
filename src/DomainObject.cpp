@@ -10,10 +10,16 @@ namespace CommonLayer
         ~Implementation() = default;
 
         int _ID;
+        ptime _timestamp;
     };
 
     DomainObject::DomainObject() { _impl = std::make_shared<Implementation>(); }
-    DomainObject::DomainObject(int id) : DomainObject() { _impl->_ID = id; }
+
+    DomainObject::DomainObject(int id, const ptime& timeStamp) : DomainObject()
+    {
+        _impl->_ID = id;
+        _impl->_timestamp;
+    }
 
     bool DomainObject::operator==(const DomainObject& domainObject) const
     {
@@ -47,5 +53,8 @@ namespace CommonLayer
 
     void DomainObject::setID(int val) { _impl->_ID = val; }
     int DomainObject::getID() const { return _impl->_ID; }
+
+    void DomainObject::setLastModified(const ptime& val) { _impl->_timestamp = val; }
+    const ptime& DomainObject::getLastModified() const { return _impl->_timestamp; }
 }
 

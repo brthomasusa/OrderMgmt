@@ -68,7 +68,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_findAll)
     AddressMapper addressMapper;
     vector<shared_ptr<Address>> addresses {addressMapper.findAll()};
 
-    uint records {3};
+    uint records {7};
     ASSERT_EQ(records, addresses.size());
 }
 
@@ -86,11 +86,11 @@ TEST(AddressMapperIntegration_Test, AddressMapper_insertEntity)
         "Arlington",
         "TX",
         "76222",
-        "27-MAR-19 05.00.36.728497000 AM"
+        second_clock::local_time()
     };
 
     addressMapper.insertEntity(newAddress);
-    int expectedResult {4};
+    int expectedResult {8};
     ASSERT_EQ(expectedResult, newAddress.getID());
 }
 
@@ -107,6 +107,7 @@ TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
     editAddres.setCity("Dallas");
     editAddres.setStateCode("TX");
     editAddres.setZipcode("56789");
+    editAddres.setLastModified(second_clock::local_time());
 
     addressMapper.updateEntity(editAddres);
     shared_ptr<Address> address {addressMapper.findById(editAddres.getID())};

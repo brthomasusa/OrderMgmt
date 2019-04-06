@@ -12,7 +12,7 @@ namespace CommonLayer
         string _telephoneNumber;
         string _extension;
         TelephoneType _telephoneType;
-        string _lastModified;
+
     };
 
     Telephone::Telephone()
@@ -21,8 +21,8 @@ namespace CommonLayer
         impl = make_shared<Implementation>();
     }
 
-    Telephone::Telephone(int id, int entityId, const string& telNum, const string& extension, const TelephoneType& telType, const string& modified)
-        : DomainObject(id)
+    Telephone::Telephone(int id, int entityId, const string& telNum, const string& extension, const TelephoneType& telType, const ptime& modified)
+        : DomainObject(id, modified)
     {
         impl = make_shared<Implementation>();
 
@@ -30,7 +30,6 @@ namespace CommonLayer
         impl->_telephoneNumber = telNum;
         impl->_extension = extension;
         impl->_telephoneType = telType;
-        impl->_lastModified = modified;
     }
 
     void Telephone::setEntityId(int val) { impl->_entityID = val; }
@@ -45,5 +44,4 @@ namespace CommonLayer
     void Telephone::setTelephoneType(const CommonLayer::TelephoneType &val) { impl->_telephoneType = val; }
     const TelephoneType& Telephone::getTelephoneType() const { return impl->_telephoneType; }
 
-    const string& Telephone::getLastModified() const { return impl->_lastModified; }
 }

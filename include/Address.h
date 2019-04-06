@@ -15,7 +15,7 @@ namespace CommonLayer
     public:
         Address();
         Address(int id, int entityId, const string& line1, const string& line2, const string& city,
-                const string& state, const string& zipcode, const string& timestamp);
+                const string& state, const string& zipcode, const ptime& timestamp);
         ~Address() = default;
 
         void setEntityId(int val);
@@ -30,7 +30,6 @@ namespace CommonLayer
         const string& getStateCode() const;
         void setZipcode(const string& val);
         const string& getZipcode() const;
-        const string& getTimestamp() const;
 
     private:
         class Implementation;

@@ -27,8 +27,8 @@ namespace DataAccess
 
         string sql = R"(
         INSERT INTO addresses
-        (entity_id, address_line1, address_line2, city, state_code, zipcode)
-        VALUES (:1, :2, :3, :4, :5, :6)
+        (entity_id, address_line1, address_line2, city, state_code, zipcode, last_modified)
+        VALUES (:1, :2, :3, :4, :5, :6, :7)
         )";
 
         try
@@ -38,14 +38,19 @@ namespace DataAccess
             Connection connection("oracle18db/xepdb1", "cust_orders", "Info77Gum");
             Statement stmt(connection);
 
+            // Can only be initialized after call to Environment::Initialize()
+            Timestamp ociTimestamp(Timestamp::NoTimeZone);
+            ociTimestamp = Timestamp::SysTimestamp();
+
             stmt.Prepare(sql);
-            string test {"Hello"};
+
             stmt.Bind(":1", entityID , BindInfo::In);
             stmt.Bind(":2", line1, calcStrLen(line1), BindInfo::In);
             stmt.Bind(":3", line2, calcStrLen(line2), BindInfo::In);
             stmt.Bind(":4", city, calcStrLen(city), BindInfo::In);
             stmt.Bind(":5", stateCode, calcStrLen(stateCode), BindInfo::In);
             stmt.Bind(":6", zipcode, calcStrLen(zipcode), BindInfo::In);
+            stmt.Bind(":7", ociTimestamp, BindInfo::In);
 
             stmt.ExecutePrepared();
             connection.Commit();
@@ -93,8 +98,9 @@ namespace DataAccess
         address_line2 = :3,
         city = :4,
         state_code = :5,
-        zipcode = :6
-        WHERE address_id = :7
+        zipcode = :6,
+        last_modified = :7
+        WHERE address_id = :8
         )";
 
         try
@@ -104,6 +110,10 @@ namespace DataAccess
             Connection connection("oracle18db/xepdb1", "cust_orders", "Info77Gum");
             Statement stmt(connection);
 
+            // Can only be initialized after call to Environment::Initialize()
+            Timestamp ociTimestamp(Timestamp::NoTimeZone);
+            ociTimestamp = Timestamp::SysTimestamp();
+
             stmt.Prepare(sql);
 
             stmt.Bind(":1", entityID , BindInfo::In);
@@ -112,7 +122,8 @@ namespace DataAccess
             stmt.Bind(":4", city, calcStrLen(city), BindInfo::In);
             stmt.Bind(":5", stateCode, calcStrLen(stateCode), BindInfo::In);
             stmt.Bind(":6", zipcode, calcStrLen(zipcode), BindInfo::In);
-            stmt.Bind(":7", addressID , BindInfo::In);
+            stmt.Bind(":7", ociTimestamp, BindInfo::In);
+            stmt.Bind(":8", addressID , BindInfo::In);
 
             stmt.ExecutePrepared();
             connection.Commit();
@@ -139,8 +150,8 @@ namespace DataAccess
             {
 
                 Timestamp tm = rs.Get<Timestamp>(kTimestamp);
-                // string timeStamp = tm.ToString("DD/MM/YYYY HH24:MI:SS:FF6");
-                string timeStamp = tm.ToString("DD/MM/YYYY HH:MI:SS:FF6 AM");
+                string timeStamp = tm.ToString("YYYY-MON-DD HH24:MI:SS:FF6");
+                ptime timeStampObj = time_from_string(timeStamp);
 
                 address = make_shared<Address>(
                     rs.Get<int>(kAddressID),
@@ -150,7 +161,7 @@ namespace DataAccess
                     rs.Get<string>(kCity),
                     rs.Get<string>(kState),
                     rs.Get<string>(kZipcode),
-                    timeStamp
+                    timeStampObj
                 );
             }
 
@@ -176,7 +187,8 @@ namespace DataAccess
             while (rs++)
             {
                 Timestamp tm = rs.Get<Timestamp>(kTimestamp);
-                string timeStamp = tm.ToString("DD/MM/YYYY HH24:MI:SS:FF6");
+                string timeStamp = tm.ToString("YYYY-MON-DD HH24:MI:SS:FF6");
+                ptime timeStampObj = time_from_string(timeStamp);
 
                 shared_ptr<Address> address = make_shared<Address>(
                     rs.Get<int>(kAddressID),
@@ -186,7 +198,7 @@ namespace DataAccess
                     rs.Get<string>(kCity),
                     rs.Get<string>(kState),
                     rs.Get<string>(kZipcode),
-                    timeStamp
+                    timeStampObj
                 );
 
                 addresses.push_back(address);

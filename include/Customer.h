@@ -22,7 +22,6 @@ namespace CommonLayer
         const string& getCustomerName() const;
         void setWebsite(const string& val);
         const string& getWebsite() const;
-        void setLastModified(const string& val);
 
     private:
         class Implementation;

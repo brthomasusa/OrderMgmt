@@ -39,10 +39,15 @@ message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
 if(ENABLE_UNIT_TESTS)
 
-    add_executable(address-mapper-integration_test "")
+    add_executable(address-mapper-integration_test "" include/MockDataMapper.h)
     target_sources(address-mapper-integration_test PRIVATE src/test-address_mapper_integration.cpp)
     target_link_libraries(address-mapper-integration_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
     set_target_properties(address-mapper-integration_test PROPERTIES LINKER_LANGUAGE CXX)
+
+    add_executable(inventory-mapper_test "" src/test-inventory_mapper.cpp)
+    target_sources(inventory-mapper_test PRIVATE src/test-inventory_mapper.cpp)
+    target_link_libraries(inventory-mapper_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
+    set_target_properties(inventory-mapper_test PROPERTIES LINKER_LANGUAGE CXX)
 
     find_program(MEMORYCHECK_COMMAND NAMES valgrind)
     set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")

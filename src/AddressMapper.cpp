@@ -1,9 +1,6 @@
 #include "AddressMapper.h"
-#include "ocilib.hpp"
-#include <iostream>
 
 using namespace std;
-using namespace ocilib;
 
 namespace DataAccess
 {

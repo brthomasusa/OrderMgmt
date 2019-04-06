@@ -19,4 +19,8 @@ add_library(OrderManager_v1 SHARED
         ../src/InventoryMapper.cpp
         ../include/MockDataMapper.h
         ../include/IRepository.h
-        ../include/CustomerMapper.h ../src/CustomerMapper.cpp ../include/TelephoneMapper.h ../src/TelephoneMapper.cpp)
+        ../include/CustomerMapper.h
+        ../src/CustomerMapper.cpp
+        ../include/TelephoneMapper.h
+        ../src/TelephoneMapper.cpp
+        ../include/CustomerRepository.h ../src/CustomerRepository.cpp)

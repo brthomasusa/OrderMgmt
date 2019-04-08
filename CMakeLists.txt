@@ -49,6 +49,17 @@ if(ENABLE_UNIT_TESTS)
     target_link_libraries(inventory-mapper_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
     set_target_properties(inventory-mapper_test PROPERTIES LINKER_LANGUAGE CXX)
 
+    add_executable(customer-repository_test "" src/test-customer_repository.cpp)
+    target_sources(customer-repository_test PRIVATE src/test-customer_repository.cpp)
+    target_link_libraries(customer-repository_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
+    set_target_properties(customer-repository_test PROPERTIES LINKER_LANGUAGE CXX)
+
+    add_executable(customer-repository-integration_test "" src/test-customer_repository_integration.cpp)
+    target_sources(customer-repository-integration_test PRIVATE src/test-customer_repository_integration.cpp)
+    target_link_libraries(customer-repository-integration_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
+    set_target_properties(customer-repository-integration_test PROPERTIES LINKER_LANGUAGE CXX)
+
+
     find_program(MEMORYCHECK_COMMAND NAMES valgrind)
     set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
 
@@ -57,6 +68,9 @@ if(ENABLE_UNIT_TESTS)
     enable_testing()
 
     add_test(NAME address-mapper-integration_test COMMAND $<TARGET_FILE:address-mapper-integration_test>)
+    add_test(NAME inventory-mapper_test COMMAND $<TARGET_FILE:inventory-mapper_test>)
+    add_test(NAME customer-repository_test COMMAND $<TARGET_FILE:customer-repository_test>)
+    add_test(NAME customer-repository-integration_test COMMAND $<TARGET_FILE:customer-repository-integration_test>)
 
 
 endif()

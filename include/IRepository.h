@@ -1,21 +1,23 @@
 #pragma once
 
-#include "IDataMapper.h"
+#include <memory>
+#include <vector>
+#include "DomainObject.h"
 
 namespace DataAccess
 {
-    template <typename T>
     class IRepository
     {
+
     public:
-        IRepository(const IDataMapper<T>& dataMapper);
+        IRepository() = default;
         virtual ~IRepository() = default;
 
-        virtual T findById(int entityID) = 0;
-        virtual vector<shared_ptr<T>> findChildren(int parentID) = 0;
-        virtual vector<shared_ptr<T>> findAll() = 0;
-        virtual void insertEntity(T& entity) = 0;
-        virtual void updateEntity(const T& entity) = 0;
+        virtual shared_ptr<DomainObject> findById(int entityID) = 0;
+        virtual vector<shared_ptr<DomainObject>> findChildren(int parentID) = 0;
+        virtual vector<shared_ptr<DomainObject>> findAll() = 0;
+        virtual void insertEntity(DomainObject& entity) = 0;
+        virtual void updateEntity(const DomainObject& entity) = 0;
         virtual void deleteEntity(int entityID) = 0;
     };
 }

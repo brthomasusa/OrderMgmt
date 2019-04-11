@@ -2,37 +2,48 @@
 
 #include <vector>
 #include "DomainObject.h"
-#include <cassert>
+#include "IRepository.h"
 #include <algorithm>
 
 using namespace std;
+using namespace CommonLayer;
 
-namespace CommonLayer
+namespace DataAccess
 {
     class IUnitOfWork
     {
 
     public:
-        void registerNew(DomainObject& obj)
+        IUnitOfWork(IRepository& repository) : _repository{repository} {}
+        virtual ~IUnitOfWork() = default;
+
+        void markforInsert(DomainObject& obj)
         {
-            assert(obj.getID() != NULL);
 
-            // Assert not in _dirtyObjects
-            assert( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) == _dirtyObjects.end() );
+            if ( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) != _dirtyObjects.end() )
+            {
+                return;
+            }
 
-            // Assert not in removedObjects
-            assert( std::find(_removedObjects.begin(), _removedObjects.end(), obj) == _removedObjects.end() );
+            if ( std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end() )
+            {
+                return;
+            }
 
-            // Assert not in _newObjects
-            assert( std::find(_newObjects.begin(), _newObjects.end(), obj) == _newObjects.end() );
+            if ( std::find(_newObjects.begin(), _newObjects.end(), obj) == _newObjects.end() )
+            {
+                _newObjects.push_back(obj);
+            }
 
-            _newObjects.push_back(obj);
         }
 
-        void registerDirty(DomainObject& obj)
+        void markForUpdate(DomainObject& obj)
         {
-            assert(obj.getID() != NULL);
-            assert( std::find(_removedObjects.begin(), _removedObjects.end(), obj) == _removedObjects.end() );
+
+            if ( std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end() )
+            {
+                return;
+            }
 
             if (std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) == _dirtyObjects.end() &&
                 std::find(_newObjects.begin(), _newObjects.end(), obj) == _newObjects.end())
@@ -41,9 +52,8 @@ namespace CommonLayer
             }
         }
 
-        void registerRemoved(DomainObject& obj)
+        void markForDelete(DomainObject& obj)
         {
-            assert(obj.getID() != NULL);
 
             // If it's in the new list (to be inserted), just remove
             // it from the new list and we're done.
@@ -67,13 +77,10 @@ namespace CommonLayer
             }
         }
 
-        void registerClean(DomainObject& obj)
-        {
-            // This would be where objects freshly pulled from
-            // the database would be stored (until edited or deleted).
+        virtual void saveChanges() = 0;
 
-            assert(obj.getID() != NULL);
-        }
+    protected:
+        IRepository& _repository;
 
     private:
         vector<DomainObject> _newObjects;

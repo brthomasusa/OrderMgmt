@@ -13,7 +13,13 @@ namespace CommonLayer
         ptime _timestamp;
     };
 
-    DomainObject::DomainObject() { _impl = std::make_shared<Implementation>(); }
+    DomainObject::DomainObject()
+    {
+        _impl = std::make_shared<Implementation>();
+        ptime p;
+        _impl->_ID = -1;
+        _impl->_timestamp = p;
+    }
 
     DomainObject::DomainObject(int id, const ptime& timeStamp) : DomainObject()
     {

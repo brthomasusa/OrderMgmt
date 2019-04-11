@@ -2,22 +2,35 @@
 
 namespace DataAccess
 {
-    CustomerRepository::CustomerRepository(CustomerMapper& customerMapper)
+    CustomerRepository::CustomerRepository(CustomerMapper& customerMapper, AddressMapper& addressMapper, TelephoneMapper& telephoneMapper)
             : _customerMapper {customerMapper}
+            , _addressMapper {addressMapper}
+            , _telephoneMapper {telephoneMapper}
     {
     }
 
     shared_ptr<DomainObject> CustomerRepository::findById(int entityID)
     {
         shared_ptr<Customer> customer {_customerMapper.findById(entityID)};
+        vector<shared_ptr<Address>> addressBuffer {_addressMapper.findChildren(customer->getID())};
+        vector<shared_ptr<Telephone>> telephoneBuffer {_telephoneMapper.findChildren(customer->getID())};
+
+        shared_ptr<vector<shared_ptr<Address>>> addresses {make_shared<vector<shared_ptr<Address>>>()};
+        for (const shared_ptr<Address>& address : addressBuffer)
+        {
+            addresses->push_back(address);
+        }
+
+        shared_ptr<vector<shared_ptr<Telephone>>> telephones {make_shared<vector<shared_ptr<Telephone>>>()};
+        for (const shared_ptr<Telephone>& telephone : telephoneBuffer)
+        {
+            telephones->push_back(telephone);
+        }
+
+        customer->setAddresses(addresses);
+        customer->setTelephones(telephones);
+
         return customer;
-    }
-
-    vector<shared_ptr<DomainObject>> CustomerRepository::findChildren(int parentID)
-    {
-        vector<shared_ptr<DomainObject>> domainObjects;
-
-        return domainObjects;
     }
 
     vector<shared_ptr<DomainObject>> CustomerRepository::findAll()

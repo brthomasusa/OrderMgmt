@@ -19,7 +19,10 @@ namespace CommonLayer
         double _itemWeight;
     };
 
-    Inventory::Inventory() : DomainObject() { _impl = make_shared<Implementation>(); }
+    Inventory::Inventory() : DomainObject()
+    {
+        _impl = make_shared<Implementation>();
+    }
 
     Inventory::Inventory(int id, int vendorId, const string& sku, const string& desc, double ucost,
                          double price, int onhand, int reorder, double weight, const ptime& timeStamp)

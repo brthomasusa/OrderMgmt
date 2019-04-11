@@ -1,8 +1,25 @@
-//
-// Created by bthomas on 4/7/19.
-//
+#pragma once
 
-#ifndef ORDERMANAGER_V1_IACTIONMANAGER_H
-#define ORDERMANAGER_V1_IACTIONMANAGER_H
+#include <memory>
+#include "DomainObject.h"
 
-#endif //ORDERMANAGER_V1_IACTIONMANAGER_H
+using namespace CommonLayer;
+
+namespace BusinessLayer
+{
+    class IActionManager
+    {
+
+    public:
+        IActionManager() = default;
+        virtual ~IActionManager() = default;
+
+        virtual void Create(DomainObject& entity) = 0;
+        virtual void Update(DomainObject& entity) = 0;
+        virtual void Delete(DomainObject& entity) = 0;
+        virtual shared_ptr<vector<shared_ptr<DomainObject>>> getAll() = 0;
+        virtual shared_ptr<DomainObject> getById(int entityID) = 0;
+        virtual void saveChanges() = 0;
+
+    };
+}

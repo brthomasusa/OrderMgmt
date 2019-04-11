@@ -1,8 +1,9 @@
 #pragma once
 
-#include "CustomerMapper.h"
 #include "IRepository.h"
-#include "Customer.h"
+#include "CustomerMapper.h"
+#include "AddressMapper.h"
+#include "TelephoneMapper.h"
 
 using namespace CommonLayer;
 
@@ -12,11 +13,10 @@ namespace DataAccess
     {
 
     public:
-        CustomerRepository(CustomerMapper& customerMapper);
+        CustomerRepository(CustomerMapper& customerMapper, AddressMapper& addressMapper, TelephoneMapper& telephoneMapper);
         ~CustomerRepository() = default;
 
         shared_ptr<DomainObject> findById(int entityID) override ;
-        vector<shared_ptr<DomainObject>> findChildren(int parentID) override;
         vector<shared_ptr<DomainObject>> findAll() override ;
         void insertEntity(DomainObject& entity) override;
         void updateEntity(const DomainObject& entity) override;
@@ -24,5 +24,7 @@ namespace DataAccess
 
     private:
         CustomerMapper& _customerMapper;
+        AddressMapper& _addressMapper;
+        TelephoneMapper& _telephoneMapper;
     };
 }

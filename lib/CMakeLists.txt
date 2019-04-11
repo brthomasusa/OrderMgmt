@@ -23,4 +23,11 @@ add_library(OrderManager_v1 SHARED
         ../src/CustomerMapper.cpp
         ../include/TelephoneMapper.h
         ../src/TelephoneMapper.cpp
-        ../include/CustomerRepository.h ../src/CustomerRepository.cpp ../include/IActionManager.h)
+        ../include/CustomerRepository.h
+        ../src/CustomerRepository.cpp
+        ../include/IActionManager.h
+        ../include/BusinessManagerFactory.h
+        ../include/IBusinessManager.h
+        ../include/ICustomerManager.h
+        ../include/CustomerManager.h
+        ../src/CustomerManager.cpp ../include/CustomerUnitOfWork.h ../src/CustomerUnitOfWork.cpp)

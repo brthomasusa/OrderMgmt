@@ -17,6 +17,7 @@ namespace DataAccess
         ~CustomerRepository() = default;
 
         shared_ptr<DomainObject> findById(int entityID) override ;
+        vector<shared_ptr<DomainObject>> findChildren(int parentID) override;
         vector<shared_ptr<DomainObject>> findAll() override ;
         void insertEntity(DomainObject& entity) override;
         void updateEntity(const DomainObject& entity) override;

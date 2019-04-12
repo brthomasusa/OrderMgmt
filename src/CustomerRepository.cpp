@@ -12,7 +12,8 @@ namespace DataAccess
     shared_ptr<DomainObject> CustomerRepository::findById(int entityID)
     {
         shared_ptr<Customer> customer {_customerMapper.findById(entityID)};
-        vector<shared_ptr<Address>> addressBuffer {_addressMapper.findChildren(customer->getID())};
+        int entID {customer->getID()};
+        vector<shared_ptr<Address>> addressBuffer {_addressMapper.findChildren(entID)};
         vector<shared_ptr<Telephone>> telephoneBuffer {_telephoneMapper.findChildren(customer->getID())};
 
         shared_ptr<vector<shared_ptr<Address>>> addresses {make_shared<vector<shared_ptr<Address>>>()};
@@ -33,12 +34,20 @@ namespace DataAccess
         return customer;
     }
 
+    vector<shared_ptr<DomainObject>> CustomerRepository::findChildren(int parentID)
+    {
+        // findChildren is implemented and used in IDataMapper and its derived classes
+        // but not in the IRepository classes
+        vector<shared_ptr<DomainObject>> domainObjects;
+        return domainObjects;
+    }
+
     vector<shared_ptr<DomainObject>> CustomerRepository::findAll()
     {
         vector<shared_ptr<Customer>> customers = _customerMapper.findAll();
         vector<shared_ptr<DomainObject>> domainObjects;
 
-        for (auto customer : customers)
+        for (const auto& customer : customers)
         {
             domainObjects.push_back(customer);
         }

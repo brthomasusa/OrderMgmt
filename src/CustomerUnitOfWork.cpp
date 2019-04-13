@@ -14,29 +14,10 @@ namespace DataAccess
     {
         Logger::instance().LogInfo("Entering CustomerUnitOfWork::markforInsert");
 
-        Customer& customer {dynamic_cast<Customer&>(obj)};
-
-        if (isInNewObjectCache(customer))
-        {
-            Logger::instance().LogError("This object is already in the new object cache.");
-            throw invalid_argument("This object is already in new object cache.");
-        }
-
-        if ( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) != _dirtyObjects.end() )
-        {
-            Logger::instance().LogError("Can not add to new object cache, object is already in modified object cache.");
-            throw invalid_argument("Can not add to new object cache, object is already in modified object cache.");
-        }
-
-        if ( std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end() )
-        {
-            Logger::instance().LogError("Can not add to new object cache, object is already in delete object cache.");
-            throw invalid_argument("Can not add to new object cache, object is already in delete object cache.");
-        }
-
+        checkObjectCaches(obj);
         int tempPrimaryKey {static_cast<int>(_newObjects.size() + 1)};
         obj.setID(tempPrimaryKey);
-        _newObjects.push_back(customer);
+        _newObjects.push_back(dynamic_cast<Customer&>(obj));
 
         Logger::instance().LogInfo("Leaving CustomerUnitOfWork::markforInsert");
     }
@@ -45,18 +26,7 @@ namespace DataAccess
     {
         Logger::instance().LogInfo("Entering CustomerUnitOfWork::markforUpdate");
 
-        if ( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) != _dirtyObjects.end() )
-        {
-            Logger::instance().LogError("This object is already in the dirty object cache.");
-            throw invalid_argument("This object is already in the dirty object cache.");
-        }
-
-        if (std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end())
-        {
-            Logger::instance().LogError("Can not add to dirty object cache, object is already in the delete object cache.");
-            throw invalid_argument("Can not add to dirty object cache, object is already in the delete object cache.");
-        }
-
+        checkObjectCaches(obj);
         _dirtyObjects.push_back(dynamic_cast<Customer&>(obj));
 
         Logger::instance().LogInfo("Leaving CustomerUnitOfWork::markforUpdate");
@@ -66,18 +36,7 @@ namespace DataAccess
     {
         Logger::instance().LogInfo("Entering CustomerUnitOfWork::markforDelete");
 
-        if ( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) != _dirtyObjects.end() )
-        {
-            Logger::instance().LogError("Can not add to dirty object cache, object is already in the dirty object cache.");
-            throw invalid_argument("Can not add to dirty object cache, object is already in the dirty object cache.");
-        }
-
-        if (std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end())
-        {
-            Logger::instance().LogError("This object is already in the delete object cache.");
-            throw invalid_argument("This object is already in the delete object cache.");
-        }
-
+        checkObjectCaches(obj);
         _removedObjects.push_back(dynamic_cast<Customer&>(obj));
 
         Logger::instance().LogInfo("Leaving CustomerUnitOfWork::markforDelete");
@@ -111,7 +70,7 @@ namespace DataAccess
         Logger::instance().LogInfo("Leaving CustomerUnitOfWork::saveChanges");
     }
 
-    bool CustomerUnitOfWork::isInNewObjectCache(const Customer& customer) const
+    bool CustomerUnitOfWork::checkNewObjectCache(const Customer& customer) const
     {
         Logger::instance().LogInfo("Entering CustomerUnitOfWork::isInNewObjectCache");
 
@@ -129,6 +88,31 @@ namespace DataAccess
         Logger::instance().LogInfo("Leaving CustomerUnitOfWork::isInNewObjectCache");
 
         return retVal;
+    }
+
+    void CustomerUnitOfWork::checkObjectCaches(const DomainObject& obj) const
+    {
+        Logger::instance().LogInfo("Entering CustomerUnitOfWork::isInAnyObjectCache");
+
+        if (checkNewObjectCache(dynamic_cast<const Customer&>(obj)))
+        {
+            Logger::instance().LogError("This object is already in the new object cache.");
+            throw invalid_argument("This object is already in new object cache.");
+        }
+
+        if ( std::find(_dirtyObjects.begin(), _dirtyObjects.end(), obj) != _dirtyObjects.end() )
+        {
+            Logger::instance().LogError("This object is already in modified object cache.");
+            throw invalid_argument("This object is already in modified object cache.");
+        }
+
+        if ( std::find(_removedObjects.begin(), _removedObjects.end(), obj) != _removedObjects.end() )
+        {
+            Logger::instance().LogError("This object is already in delete object cache.");
+            throw invalid_argument("This object is already in delete object cache.");
+        }
+
+        Logger::instance().LogInfo("Leaving CustomerUnitOfWork::isInAnyObjectCache");
     }
 }
 

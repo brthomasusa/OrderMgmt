@@ -29,10 +29,9 @@ TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_valid_domainobj)
     NiceMock<MockRepository> repository;
     CustomerUnitOfWork uow {repository};
     ASSERT_NO_THROW(uow.markforInsert(customer));
-
 }
 
-TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_duplicate_domainobj)
+TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_duplicate_in_new_cache)
 {
     int custID {-1};
     ptime nullTime;
@@ -45,7 +44,7 @@ TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_duplicate_domainobj)
     ASSERT_THROW(uow.markforInsert(customer), invalid_argument);
 }
 
-TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_dirty_domainobj)
+TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_already_in_dirty_cache)
 {
     int custID {1};
     ptime nullTime;
@@ -58,7 +57,7 @@ TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_dirty_domainobj)
     ASSERT_THROW(uow.markforInsert(customer), invalid_argument);
 }
 
-TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_removed_domainobj)
+TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_already_in_delete_cache)
 {
     int custID {1};
     ptime nullTime;
@@ -71,21 +70,54 @@ TEST(IUnitOfWork_Test, IUnitOfWork_markForInsert_invalid_removed_domainobj)
     ASSERT_THROW(uow.markforInsert(customer), invalid_argument);
 }
 
+TEST(IUnitOfWork_Test, IUnitOfWork_markForUpdate_valid_domainobj)
+{
+    int custID {3};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
 
+    NiceMock<MockRepository> repository;
+    CustomerUnitOfWork uow {repository};
+    ASSERT_NO_THROW(uow.markForUpdate(customer));
+}
 
+TEST(IUnitOfWork_Test, IUnitOfWork_markForUpdate_invalid_duplicate_in_dirty_cache)
+{
+    int custID {3};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
 
+    NiceMock<MockRepository> repository;
+    CustomerUnitOfWork uow {repository};
+    ASSERT_NO_THROW(uow.markForUpdate(customer));
+    ASSERT_THROW(uow.markForUpdate(customer), invalid_argument);
+}
 
+TEST(IUnitOfWork_Test, IUnitOfWork_markForUpdate_invalid_already_in_delete_cache)
+{
+    int custID {3};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
 
+    NiceMock<MockRepository> repository;
+    CustomerUnitOfWork uow {repository};
+    ASSERT_NO_THROW(uow.markForDelete(customer));
+    ASSERT_THROW(uow.markForUpdate(customer), invalid_argument);
+}
 
+TEST(IUnitOfWork_Test, IUnitOfWork_markForUpdate_invalid_already_in_new_cache)
+{
+    int custID {3};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
 
+    NiceMock<MockRepository> repository;
+    CustomerUnitOfWork uow {repository};
+    ASSERT_NO_THROW(uow.markforInsert(customer));
+    ASSERT_THROW(uow.markForUpdate(customer), invalid_argument);
+}
 
-
-
-
-
-
-
-TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_insertEntity_called_once)
+TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_insertEntity)
 {
     int custID {-1};
     ptime nullTime;
@@ -98,12 +130,43 @@ TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_insertEntity_called_once)
         EXPECT_CALL(repository, insertEntity(dynamic_cast<DomainObject&>(customer))).Times(1).WillOnce(Return());
     }
 
-    CustomerUnitOfWork uof {repository};
-    uof.markforInsert(customer);
-    uof.saveChanges();
+    CustomerUnitOfWork uow {repository};
+    uow.markforInsert(customer);
+    uow.saveChanges();
 }
 
-//TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_insertEntity_called_twice)
-//{
-//    //ASSERT_THROW(statement, exception_type);
-//}
+TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_updateEntity)
+{
+    int custID {1};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
+
+    NiceMock<MockRepository> repository;
+
+    {
+        InSequence s;  // A<DomainObject&>()
+        EXPECT_CALL(repository, updateEntity(dynamic_cast<const DomainObject&>(customer))).Times(1).WillOnce(Return());
+    }
+
+    CustomerUnitOfWork uow {repository};
+    uow.markForUpdate(customer);
+    uow.saveChanges();
+}
+
+TEST(IUnitOfWork_Test, IUnitOfWork_saveChanges_deleteEntity)
+{
+    int custID {1};
+    ptime nullTime;
+    Customer customer{custID, "Test Customer", "www.testcustomer.com", nullTime};
+
+    NiceMock<MockRepository> repository;
+
+    {
+        InSequence s;  // A<DomainObject&>()
+        EXPECT_CALL(repository, deleteEntity(An<int>())).Times(1).WillOnce(Return());
+    }
+
+    CustomerUnitOfWork uow {repository};
+    uow.markForDelete(customer);
+    uow.saveChanges();
+}

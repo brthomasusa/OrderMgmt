@@ -23,7 +23,8 @@ namespace DataAccess
         void saveChanges() override;
 
     private:
-        bool isInNewObjectCache(const Customer& customer) const;
+        bool checkNewObjectCache(const Customer& customer) const;
+        void checkObjectCaches(const DomainObject& obj) const;
 
         IRepository& _repository;
         vector<Customer> _newObjects;

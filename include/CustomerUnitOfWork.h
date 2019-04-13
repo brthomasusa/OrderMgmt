@@ -1,6 +1,12 @@
 #pragma once
 
+#include <vector>
 #include "IUnitOfWork.h"
+#include "IRepository.h"
+#include "Customer.h"
+
+using namespace std;
+using namespace CommonLayer;
 
 namespace DataAccess
 {
@@ -8,9 +14,20 @@ namespace DataAccess
     {
 
     public:
-        CustomerUnitOfWork(IRepository& repository) : IUnitOfWork(repository) {}
-        virtual ~CustomerUnitOfWork() = default;
+        explicit CustomerUnitOfWork(IRepository& repository) : _repository(repository) {}
+        ~CustomerUnitOfWork() override;
 
-        virtual void saveChanges() override;
+        void markforInsert(DomainObject& obj) override;
+        void markForUpdate(DomainObject& obj) override;
+        void markForDelete(DomainObject& obj) override;
+        void saveChanges() override;
+
+    private:
+        bool isInNewObjectCache(const Customer& customer) const;
+
+        IRepository& _repository;
+        vector<Customer> _newObjects;
+        vector<Customer> _dirtyObjects;
+        vector<Customer> _removedObjects;
     };
 }

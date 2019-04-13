@@ -31,7 +31,7 @@ namespace CommonLayer
     }
 
     Customer::Customer(const Customer& src)
-        : DomainObject()
+        : Customer()
     {
 
         this->setID(src.getID());
@@ -67,6 +67,8 @@ namespace CommonLayer
             this->impl->_telephones->push_back(telephone);
         }
     }
+
+    Customer::~Customer() {}
 
     Customer& Customer::operator=(const Customer& src)
     {

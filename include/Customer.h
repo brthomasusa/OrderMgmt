@@ -19,7 +19,7 @@ namespace CommonLayer
         Customer(int id, const string& name, const string& website, const ptime& timeStamp);
         Customer(const Customer& src);
         Customer& operator=(const Customer& src);
-        ~Customer() = default;
+        ~Customer() override;
 
         void setCustomerId(int val);
         int getCustomerId() const;

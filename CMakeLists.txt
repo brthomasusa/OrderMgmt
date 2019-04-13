@@ -64,6 +64,10 @@ if(ENABLE_UNIT_TESTS)
     target_link_libraries(unit-of-work_test  PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
     set_target_properties(unit-of-work_test  PROPERTIES LINKER_LANGUAGE CXX)
 
+    add_executable(customer_test "" src/test-customer.cpp src/test-customer.cpp)
+    target_sources(customer_test  PRIVATE src/test-customer.cpp)
+    target_link_libraries(customer_test  PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
+    set_target_properties(customer_test  PROPERTIES LINKER_LANGUAGE CXX)
 
     find_program(MEMORYCHECK_COMMAND NAMES valgrind)
     set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
@@ -77,6 +81,7 @@ if(ENABLE_UNIT_TESTS)
     add_test(NAME customer-repository_test COMMAND $<TARGET_FILE:customer-repository_test>)
     add_test(NAME customer-repository-integration_test COMMAND $<TARGET_FILE:customer-repository-integration_test>)
     add_test(NAME unit-of-work_test COMMAND $<TARGET_FILE:unit-of-work_test>)
+    add_test(NAME customer_test COMMAND $<TARGET_FILE:customer_test>)
 
 
 endif()

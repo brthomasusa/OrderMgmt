@@ -16,13 +16,6 @@ using ::testing::AtLeast;
 using namespace DataAccess;
 using namespace CommonLayer;
 
-shared_ptr<Customer> createNewCustomer(int custid)
-{
-    ptime p;
-    shared_ptr<Customer> customer {make_shared<Customer>(custid, "New Customer", "www.newcustomer.com", p)};
-    return customer;
-}
-
 int main(int argc, char** argv)
 {
     InitGoogleTest(&argc, argv);

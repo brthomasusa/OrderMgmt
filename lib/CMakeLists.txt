@@ -26,8 +26,5 @@ add_library(OrderManager_v1 SHARED
         ../include/CustomerRepository.h
         ../src/CustomerRepository.cpp
         ../include/IActionManager.h
-        ../include/BusinessManagerFactory.h
-        ../include/IBusinessManager.h
-        ../include/ICustomerManager.h
         ../include/CustomerManager.h
-        ../src/CustomerManager.cpp ../include/CustomerUnitOfWork.h ../src/CustomerUnitOfWork.cpp ../include/MockCustomerMapper.h ../include/MockAddressMapper.h ../include/MockTelephoneMapper.h ../include/MockRepository.h)
+        ../src/CustomerManager.cpp ../include/CustomerUnitOfWork.h ../src/CustomerUnitOfWork.cpp ../include/MockCustomerMapper.h ../include/MockAddressMapper.h ../include/MockTelephoneMapper.h ../include/MockRepository.h ../include/MockActionManager.h ../include/MockUnitOfWork.h)

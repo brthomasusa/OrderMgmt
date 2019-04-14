@@ -1,9 +1,8 @@
 #pragma once
 
-#include "IBusinessManager.h"
-#include "ICustomerManager.h"
 #include "IRepository.h"
 #include "IUnitOfWork.h"
+#include "IActionManager.h"
 
 using namespace DataAccess;
 
@@ -17,7 +16,6 @@ namespace BusinessLayer
         explicit CustomerManager(IUnitOfWork& uow, IRepository& repository) : _unitOfWork{uow}, _repository{repository} {}
         virtual ~CustomerManager() = default;
 
-        // Inherited from IActionManager
         void Create(DomainObject& entity) override;
         void Update(DomainObject& entity) override;
         void Delete(DomainObject& entity) override;

@@ -39,7 +39,7 @@ message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
 if(ENABLE_UNIT_TESTS)
 
-    add_executable(address-mapper-integration_test "" include/MockDataMapper.h include/ICustomerManager.h)
+    add_executable(address-mapper-integration_test "" include/MockDataMapper.h)
     target_sources(address-mapper-integration_test PRIVATE src/test-address_mapper_integration.cpp)
     target_link_libraries(address-mapper-integration_test PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
     set_target_properties(address-mapper-integration_test PROPERTIES LINKER_LANGUAGE CXX)
@@ -69,6 +69,11 @@ if(ENABLE_UNIT_TESTS)
     target_link_libraries(customer_test  PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
     set_target_properties(customer_test  PROPERTIES LINKER_LANGUAGE CXX)
 
+    add_executable(customer-manager_test "" src/test-customer_manager.cpp src/test-customer_manager.cpp)
+    target_sources(customer-manager_test  PRIVATE src/test-customer_manager.cpp)
+    target_link_libraries(customer-manager_test  PRIVATE OrderManager_v1 gcov boost_filesystem boost_log boost_log_setup boost_thread gmock gtest clntsh ocilib m pthread)
+    set_target_properties(customer-manager_test  PROPERTIES LINKER_LANGUAGE CXX)
+
     find_program(MEMORYCHECK_COMMAND NAMES valgrind)
     set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
 
@@ -82,6 +87,7 @@ if(ENABLE_UNIT_TESTS)
     add_test(NAME customer-repository-integration_test COMMAND $<TARGET_FILE:customer-repository-integration_test>)
     add_test(NAME unit-of-work_test COMMAND $<TARGET_FILE:unit-of-work_test>)
     add_test(NAME customer_test COMMAND $<TARGET_FILE:customer_test>)
+    add_test(NAME ccustomer-manager_test COMMAND $<TARGET_FILE:customer-manager_test>)
 
 
 endif()

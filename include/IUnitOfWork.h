@@ -1,9 +1,8 @@
 #pragma once
 
-namespace CommonLayer
-{
-    class DomainObject;
-}
+#include "DomainObject.h"
+
+using namespace CommonLayer;
 
 namespace DataAccess
 {
@@ -14,9 +13,9 @@ namespace DataAccess
         IUnitOfWork() = default;
         virtual ~IUnitOfWork() = default;
 
-        virtual void markforInsert(CommonLayer::DomainObject& obj) = 0;
-        virtual void markForUpdate(CommonLayer::DomainObject& obj) = 0;
-        virtual void markForDelete(CommonLayer::DomainObject& obj) = 0;
+        virtual void markforInsert(DomainObject& obj) = 0;
+        virtual void markForUpdate(DomainObject& obj) = 0;
+        virtual void markForDelete(DomainObject& obj) = 0;
         virtual void saveChanges() = 0;
     };
 }

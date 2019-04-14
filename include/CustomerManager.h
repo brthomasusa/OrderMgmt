@@ -10,7 +10,7 @@ using namespace DataAccess;
 namespace BusinessLayer
 {
 
-    class CustomerManager : public BusinessManager, public ICustomerManager
+    class CustomerManager : public IActionManager
     {
 
     public:

@@ -17,7 +17,8 @@ link_directories(lib /home/bthomas/lib /usr/local/lib /usr/lib /usr/lib/oracle/1
 
 add_subdirectory(lib)
 
-target_link_libraries(OrderManager_v1 
+target_link_libraries(OrderManager_v1
+    boost_date_time
     boost_filesystem 
     boost_log 
     boost_log_setup 

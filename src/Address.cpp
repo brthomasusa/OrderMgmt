@@ -19,12 +19,6 @@ namespace CommonLayer
 
     };
 
-    Address::Address()
-        : DomainObject()
-    {
-        impl = make_shared<Implementation>();
-    }
-
     Address::Address(int id, int entityId, const string& line1, const string& line2, const string& city, const string& state, const string& zipcode, const ptime& timestamp)
             : DomainObject(id, timestamp)
     {
@@ -38,22 +32,11 @@ namespace CommonLayer
         impl->_zipcode = zipcode;
     }
 
-    void Address::setEntityId(int val) { impl->_entityID = val; }
     int Address::getEntityId() const { return impl->_entityID; }
-
-    void Address::setAddressLine1(const string& val) { impl->_addressLine1 = val; }
     const string& Address::getAddressLine1() const { return impl->_addressLine1; }
-
-    void Address::setAddressLine2(const string& val) { impl->_addressLine2 = val; }
     const string& Address::getAddressLine2() const { return impl->_addressLine2; }
-
-    void Address::setCity(const string& val) { impl->_city = val; }
     const string& Address::getCity() const { return impl->_city; }
-
-    void Address::setStateCode(const string& val) { impl->_stateCode = val; }
     const string& Address::getStateCode() const { return impl->_stateCode; }
-
-    void Address::setZipcode(const string& val) { impl->_zipcode = val; }
     const string& Address::getZipcode() const { return impl->_zipcode; }
 
 }

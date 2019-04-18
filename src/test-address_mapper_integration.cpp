@@ -99,21 +99,23 @@ TEST(AddressMapperIntegration_Test, AddressMapper_updateEntity)
     prepareDbForTesting();
 
     AddressMapper addressMapper;
-    Address editAddres;
-    editAddres.setID(3);
-    editAddres.setEntityId(1);
-    editAddres.setAddressLine1("AAA");
-    editAddres.setAddressLine2("null");
-    editAddres.setCity("Dallas");
-    editAddres.setStateCode("TX");
-    editAddres.setZipcode("56789");
-    editAddres.setLastModified(second_clock::local_time());
 
-    addressMapper.updateEntity(editAddres);
-    shared_ptr<Address> address {addressMapper.findById(editAddres.getID())};
+    Address editAddress{
+            3,
+            1,
+            "AAA",
+            "Ste X",
+            "Arlington",
+            "TX",
+            "76222",
+            second_clock::local_time()
+    };
 
-    EXPECT_EQ(address->getID(), editAddres.getID());
-    ASSERT_EQ(address->getAddressLine1(), editAddres.getAddressLine1());
+    addressMapper.updateEntity(editAddress);
+    shared_ptr<Address> address {addressMapper.findById(editAddress.getID())};
+
+    EXPECT_EQ(address->getID(), editAddress.getID());
+    ASSERT_EQ(address->getAddressLine1(), editAddress.getAddressLine1());
 }
 
 TEST(AddressMapperIntegration_Test, AddressMapper_deleteEntity)
